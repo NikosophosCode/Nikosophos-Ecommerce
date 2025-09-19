@@ -1,13 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" class="tap-highlight-none">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E‑Commerce</title>
+  <link rel="stylesheet" href="styles.css" />
+  <meta name="color-scheme" content="dark light" />
 </head>
-<body>
+<body class="min-h-dvh bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-slate-100 antialiased">
+  <!-- Top Nav -->
+  <header class="sticky top-0 z-40">
+    <div class="glass">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 items-center justify-between">
+          <!-- Left: Hamburger + Brand -->
+          <div class="flex items-center gap-3">
+            <button id="btnMenu" aria-label="Abrir menú" class="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg ring-1 ring-white/10 hover:ring-white/20 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/></svg>
+            </button>
+            <a href="#app" class="font-semibold tracking-tight text-lg hover:opacity-90 transition">La tiendita de WOW</a>
+          </div>
 
-<script src="index.js" defer></script>
+          <!-- Center: Search -->
+          <div class="hidden md:flex flex-1 max-w-xl">
+            <label class="relative w-full">
+              <input id="searchInput" type="search" placeholder="Buscar productos..." class="w-full rounded-xl bg-white/5 ring-1 ring-white/10 focus:ring-2 focus:ring-sky-400/60 px-4 py-2.5 placeholder:text-slate-400 outline-none transition" />
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-70">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
+              </span>
+            </label>
+          </div>
+
+          <!-- Right: Icons -->
+          <div class="flex items-center gap-2">
+            <button id="btnFav" class="relative inline-flex h-10 w-10 items-center justify-center rounded-lg ring-1 ring-white/10 hover:ring-white/20 transition" aria-label="Favoritos">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor"><path d="M11.645 20.91 2.4 12.357a5.998 5.998 0 0 1 8.487-8.487l.113.112.113-.112a5.998 5.998 0 0 1 8.487 8.487L11.645 20.91Z"/></svg>
+              <span id="favBadge" class="absolute -top-1.5 -right-1.5 h-5 min-w-5 px-1 rounded-full bg-pink-500 text-[10px] font-bold grid place-items-center hidden">0</span>
+            </button>
+            <button id="btnCart" class="relative inline-flex h-10 w-10 items-center justify-center rounded-lg ring-1 ring-white/10 hover:ring-white/20 transition" aria-label="Carrito">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386a1.5 1.5 0 0 1 1.474 1.234l.383 2.148M7.5 14.25h8.955a1.5 1.5 0 0 0 1.474-1.234l1.206-6.63a.75.75 0 0 0-.737-.886H5.493m2.007 8.75L6.75 7.5m0 0L6.494 6.382M6.75 7.5h12.75M9 20.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm9 0a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"/></svg>
+              <span id="cartBadge" class="absolute -top-1.5 -right-1.5 h-5 min-w-5 px-1 rounded-full bg-sky-500 text-[10px] font-bold grid place-items-center hidden">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-3">
+          <label class="relative block">
+            <input id="searchInputMobile" type="search" placeholder="Buscar productos..." class="w-full rounded-xl bg-white/5 ring-1 ring-white/10 focus:ring-2 focus:ring-sky-400/60 px-4 py-2.5 placeholder:text-slate-400 outline-none transition" />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-70">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg>
+            </span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Drawer Mobile -->
+  <aside id="mobileMenu" class="fixed inset-y-0 left-0 w-72 -translate-x-full transition-transform duration-300 ease-out glass z-50">
+    <nav class="h-full flex flex-col">
+      <div class="flex items-center justify-between px-4 h-16">
+        <span class="font-semibold">Menú</span>
+        <button id="btnCloseMenu" aria-label="Cerrar menú" class="inline-flex h-9 w-9 items-center justify-center rounded-md ring-1 ring-white/10 hover:ring-white/20">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="px-4 space-y-1">
+        <a class="block px-3 py-2 rounded-lg hover:bg-white/5">Inicio</a>
+        <a class="block px-3 py-2 rounded-lg hover:bg-white/5">Productos</a>
+        <a class="block px-3 py-2 rounded-lg hover:bg-white/5">Categorías</a>
+        <a class="block px-3 py-2 rounded-lg hover:bg-white/5">Contacto</a>
+      </div>
+      <div class="mt-auto p-4 text-xs text-slate-400">© 2025 E‑Commerce</div>
+    </nav>
+  </aside>
+  <div id="backdrop" class="fixed inset-0 bg-black/40 opacity-0 pointer-events-none transition-opacity z-40"></div>
+
+  <!-- Main -->
+  <main id="app" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <!-- Filters -->
+    <section class="glass rounded-2xl p-3 sm:p-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <button data-filter="all" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 transition text-sm">Todo</button>
+        <button data-filter="nuevo" class="px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition text-sm">Nuevo</button>
+        <div class="ms-auto flex items-center gap-2">
+          <label class="text-sm text-slate-300">Ordenar:</label>
+          <select id="sortSelect" class="rounded-lg bg-white/5 ring-1 ring-white/10 px-2.5 py-1.5 text-sm">
+            <option value="default">Relevancia</option>
+            <option value="price-asc">Precio: Menor a mayor</option>
+            <option value="price-desc">Precio: Mayor a menor</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grid -->
+    <section id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"></section>
+  </main>
+
+  <!-- Toasts -->
+  <div id="toasts" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 space-y-2"></div>
+
+  <script src="index.js" defer></script>
 </body>
 </html>
