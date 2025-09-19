@@ -5,7 +5,10 @@
     --glass-bg: 255 255 255 / 0.08;
     --glass-brd: 255 255 255 / 0.12;
   }
-  html, body { height: 100%; }
+  html, body { 
+    height: 100%; 
+    scroll-behavior: smooth;
+  }
   ::selection { background: rgb(59 130 246 / 0.25); }
 }
 
