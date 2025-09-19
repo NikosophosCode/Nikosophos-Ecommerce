@@ -26,6 +26,10 @@ const searchInputMobile = document.getElementById('searchInputMobile');
 const sortSelect = document.getElementById('sortSelect');
 const cartBadge = document.getElementById('cartBadge');
 const favBadge = document.getElementById('favBadge');
+// Footer refs
+const newsletterForm = document.getElementById('newsletterForm');
+const newsletterEmail = document.getElementById('newsletterEmail');
+const yearEl = document.getElementById('year');
 
 const fmtCurrency = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: CURRENCY, maximumFractionDigits: 0 }).format(Number(n) || 0);
 
@@ -231,9 +235,26 @@ const wireHeader = () => {
   });
 };
 
+// Footer wiring
+const wireFooter = () => {
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  newsletterForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const value = newsletterEmail?.value?.trim();
+    if (!value || !/^\S+@\S+\.\S+$/.test(value)) {
+      toast('Ingresa un email válido', 'error');
+      return;
+    }
+    toast('¡Gracias por suscribirte!');
+    newsletterForm.reset();
+  });
+};
+
 const init = async () => {
   renderSkeletons(12);
   wireHeader();
+  wireFooter();
   const data = await fetchData(API_URL);
   state.products = data;
   applyFilters();
