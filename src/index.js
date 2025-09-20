@@ -1,4 +1,4 @@
-const API_URL = 'https://api.escuelajs.co/api/v1/products';
+const API_URL = 'https://api.escuelajs.co/api/v1/products?offset=0&limit=44';
 const PLACEHOLDER_IMG = 'https://placehold.co/600x400?text=Sin+Imagen';
 const CURRENCY = 'USD';
 const LOCALE = 'es-ES';
