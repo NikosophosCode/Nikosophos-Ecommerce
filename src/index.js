@@ -30,6 +30,7 @@ const favBadge = document.getElementById('favBadge');
 const newsletterForm = document.getElementById('newsletterForm');
 const newsletterEmail = document.getElementById('newsletterEmail');
 const yearEl = document.getElementById('year');
+const overlayTpl = document.getElementById('productOverlayTemplate');
 
 const fmtCurrency = (n) => new Intl.NumberFormat(LOCALE, { style: 'currency', currency: CURRENCY, maximumFractionDigits: 0 }).format(Number(n) || 0);
 
@@ -104,7 +105,7 @@ const card = (p) => {
   const cat = p?.category?.name ?? 'general';
   const isFav = state.favs.has(p.id);
   return `
-  <article class="group rounded-2xl overflow-hidden glass ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:ring-white/20">
+  <article data-id="${p.id}" class="group rounded-2xl overflow-hidden glass ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:ring-white/20">
     <div class="relative">
       <figure class="aspect-[4/3] overflow-hidden">
         <img src="${imgUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer"
@@ -135,6 +136,119 @@ const card = (p) => {
       </div>
     </div>
   </article>`;
+};
+
+// Overlay de producto
+const fetchProductById = async (id) => {
+  try {
+    const res = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch (e) {
+    console.error(e);
+    toast('No se pudo cargar el producto', 'error');
+    return null;
+  }
+};
+
+const openProductOverlay = async (id) => {
+  let product = state.products.find(p => p.id === id);
+  if (!product) product = await fetchProductById(id);
+  if (!product || !overlayTpl) return;
+
+  const container = overlayTpl.content.firstElementChild.cloneNode(true);
+  const panel = container.querySelector('section');
+  const img = container.querySelector('[data-ref="img"]');
+  const title = container.querySelector('[data-ref="title"]');
+  const price = container.querySelector('[data-ref="price"]');
+  const cat = container.querySelector('[data-ref="cat"]');
+  const desc = container.querySelector('[data-ref="desc"]');
+  const btnClose = container.querySelector('[data-ref="close"]');
+  const btnAdd = container.querySelector('[data-action="add"]');
+  const btnFav = container.querySelector('[data-action="fav"]');
+  const favIcon = container.querySelector('[data-ref="favIcon"]');
+  const favText = container.querySelector('[data-ref="favText"]');
+
+  const imgUrl = pickSafeImage(product.images);
+  img.src = imgUrl;
+  img.alt = product.title || 'Producto';
+  title.textContent = product.title || 'Producto';
+  title.id = `product-dialog-title-${product.id}`;
+  panel?.setAttribute('aria-labelledby', title.id);
+  price.textContent = fmtCurrency(product.price || 0);
+  cat.textContent = product.category?.name || 'general';
+  desc.textContent = product.description || 'Sin descripción';
+  btnAdd.dataset.id = String(product.id);
+  btnFav.dataset.id = String(product.id);
+
+  const isFav = state.favs.has(product.id);
+  if (isFav) {
+    favIcon?.setAttribute('fill', 'currentColor');
+    favIcon?.classList.add('text-pink-400');
+    if (favText) favText.textContent = 'Quitar';
+  } else {
+    favIcon?.setAttribute('fill', 'none');
+    favIcon?.classList.remove('text-pink-400');
+    if (favText) favText.textContent = 'Favorito';
+  }
+
+  const prevFocus = document.activeElement;
+  document.body.classList.add('overflow-hidden');
+
+  const close = () => {
+    container.classList.remove('opacity-100');
+    document.removeEventListener('keydown', onKeydown);
+    container.removeEventListener('click', onClick);
+    btnClose?.removeEventListener('click', onCloseClick);
+    setTimeout(() => {
+      container.remove();
+      document.body.classList.remove('overflow-hidden');
+      if (prevFocus && typeof prevFocus.focus === 'function') prevFocus.focus();
+    }, 200);
+  };
+
+  const onCloseClick = () => close();
+  const onKeydown = (e) => {
+    if (e.key === 'Escape') close();
+  };
+  const onClick = (e) => {
+    if (e.target === container) return close();
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const pid = Number(btn.dataset.id);
+    if (btn.dataset.action === 'add') {
+      state.cart.set(pid, (state.cart.get(pid) || 0) + 1);
+      updateBadges();
+      toast(`Añadido: ${product.title}`);
+    }
+    if (btn.dataset.action === 'fav') {
+      if (state.favs.has(pid)) state.favs.delete(pid); else state.favs.add(pid);
+      updateBadges();
+      const nowFav = state.favs.has(pid);
+      if (nowFav) {
+        favIcon?.setAttribute('fill', 'currentColor');
+        favIcon?.classList.add('text-pink-400');
+        if (favText) favText.textContent = 'Quitar';
+      } else {
+        favIcon?.setAttribute('fill', 'none');
+        favIcon?.classList.remove('text-pink-400');
+        if (favText) favText.textContent = 'Favorito';
+      }
+      const productInState = state.products.find(p => p.id === pid);
+      if (productInState) {
+        const cardEl = grid.querySelector(`article[data-id="${pid}"]`);
+        if (cardEl) cardEl.outerHTML = card(productInState);
+      }
+    }
+  };
+
+  btnClose?.addEventListener('click', onCloseClick);
+  container.addEventListener('click', onClick);
+  document.addEventListener('keydown', onKeydown);
+
+  document.body.appendChild(container);
+  requestAnimationFrame(() => container.classList.add('opacity-100'));
+  setTimeout(() => btnClose?.focus(), 0);
 };
 
 const applyFilters = () => {
@@ -182,26 +296,32 @@ const updateBadges = () => {
 // Eventos
 const onGridClick = (e) => {
   const btn = e.target.closest('button[data-action]');
-  if (!btn) return;
-  const id = Number(btn.dataset.id);
-  const product = state.products.find(p => p.id === id);
-  if (!product) return;
-
-  if (btn.dataset.action === 'add') {
-    state.cart.set(id, (state.cart.get(id) || 0) + 1);
-    updateBadges();
-    toast(`Añadido: ${product.title}`);
-  }
-  if (btn.dataset.action === 'fav') {
-    if (state.favs.has(id)) state.favs.delete(id); else state.favs.add(id);
-    updateBadges();
-    // Re-render ícono corazón
-    const cardEl = btn.closest('article');
-    if (cardEl) {
-      cardEl.outerHTML = card(product);
-    } else {
-      render();
+  if (btn) {
+    const id = Number(btn.dataset.id);
+    const product = state.products.find(p => p.id === id);
+    if (!product) return;
+    if (btn.dataset.action === 'add') {
+      state.cart.set(id, (state.cart.get(id) || 0) + 1);
+      updateBadges();
+      toast(`Añadido: ${product.title}`);
     }
+    if (btn.dataset.action === 'fav') {
+      if (state.favs.has(id)) state.favs.delete(id); else state.favs.add(id);
+      updateBadges();
+      const cardEl = btn.closest('article');
+      if (cardEl) {
+        cardEl.outerHTML = card(product);
+      } else {
+        render();
+      }
+    }
+    return; // evitar abrir overlay si se clickea un botón
+  }
+
+  const cardEl = e.target.closest('article[data-id]');
+  if (cardEl) {
+    const id = Number(cardEl.dataset.id);
+    if (!Number.isNaN(id)) openProductOverlay(id);
   }
 };
 
