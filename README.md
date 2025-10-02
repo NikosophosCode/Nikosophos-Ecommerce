@@ -190,7 +190,7 @@ Design System | Documentar utilidades y tokens (glass, spacing, color roles).
 5. Abre PR con descripción clara (qué, por qué, cómo).
 
 ## Licencia
-MIT (ajustar si es necesario).
+MIT
 
 ---
 
