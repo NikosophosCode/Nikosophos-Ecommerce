@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { ProductGrid } from '@/features/products/ui/ProductGrid'
 import { ProductDialog } from '@/features/products/ui/ProductDialog'
 import { Header } from '@/components/Header'
+import { CategoryNav } from '@/features/categories'
 import type { Product } from '@/lib/types'
 
 export function HomePage() {
@@ -22,21 +23,28 @@ export function HomePage() {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      <Header onSearch={handleSearch} searchQuery={searchQuery} />
-      
-      <main className="container mx-auto">
-        <ProductGrid
-          params={searchQuery ? { title: searchQuery } : {}}
-          onProductClick={setSelectedProduct}
-        />
-      </main>
+    <div className="min-h-screen">
+      <div className="mx-auto px-2 md:px-4 py-4">
+        <Header onSearch={handleSearch} searchQuery={searchQuery} />
+        
+        {/* Navegación de categorías separada */}
+        <div className="glass rounded-2xl p-4 mb-6">
+          <CategoryNav />
+        </div>
+        
+        <main>
+          <ProductGrid
+            params={searchQuery ? { title: searchQuery } : {}}
+            onProductClick={setSelectedProduct}
+          />
+        </main>
 
-      <ProductDialog
-        product={selectedProduct}
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
+        <ProductDialog
+          product={selectedProduct}
+          isOpen={!!selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+        />
+      </div>
     </div>
   )
 }

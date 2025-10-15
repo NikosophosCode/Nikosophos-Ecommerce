@@ -46,8 +46,8 @@ export function CartPage() {
   }
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="container mx-auto max-w-5xl">
+    <div className="min-h-screen">
+      <div className="mx-auto max-w-5xl px-2 md:px-4 py-4">
         <Header />
 
         <div className="mt-6">
@@ -102,7 +102,7 @@ export function CartPage() {
           {hasItems && (
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Lista de productos */}
-              <div className="lg:col-span-2 space-y-3">
+              <div className="lg:col-span-2 space-y-3 min-w-0">
                 {isLoading && (
                   <div className="glass rounded-xl p-8 text-center">
                     <p className="text-slate-300">Cargando productos...</p>

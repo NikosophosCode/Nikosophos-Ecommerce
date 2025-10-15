@@ -8,7 +8,7 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ## Progreso actual de la migración (2025-01-14)
 
-Estado general: **Fase 4 completada con éxito**. La aplicación ahora cuenta con navegación por categorías reales, filtrado de productos por categoría, y sincronización completa del estado de búsqueda con la URL mediante query parameters.
+Estado general: **Fase 4 completada con éxito + Mejoras de navegación y responsive implementadas**. La aplicación ahora cuenta con navegación por categorías reales, filtrado de productos por categoría, sincronización completa del estado de búsqueda con la URL, navegación principal completa y menú móvil funcional.
 
 - **Completado (Fase 1)**
   - ✅ Proyecto React + Vite creado en `web/` con TypeScript
@@ -48,6 +48,16 @@ Estado general: **Fase 4 completada con éxito**. La aplicación ahora cuenta co
   - ✅ CategoryPage funcional con filtrado por categoryId desde URL params
   - ✅ Sincronización de búsqueda con URL query params (`?q=...`) en HomePage y CategoryPage
   - ✅ Deep linking: URLs reflejan estado completo (categoría + búsqueda)
+
+- **Completado (Mejoras adicionales - 2025-01-14)**
+  - ✅ Componente `MainNav` con pestañas de navegación (Inicio, Perfil, Contacto)
+  - ✅ Componente `MobileNav` con drawer lateral, backdrop y animaciones
+  - ✅ Header refactorizado: más compacto, sin CategoryNav integrado
+  - ✅ CategoryNav separado del header con contenedor propio
+  - ✅ Fix responsive en CartPage: eliminado overflow horizontal
+  - ✅ Header integrado en todas las páginas (FavoritesPage, ProfilePage, ContactPage)
+  - ✅ Navegación consistente en desktop y móvil
+  - ✅ Accesibilidad mejorada: aria-labels, keyboard navigation, focus management
   - ✅ Header reorganizado con CategoryNav visible en todas las páginas
   - ✅ Estilos `scrollbar-hide` para scroll horizontal limpio
   - ✅ Manejo de errores y estados vacíos en CategoryPage
