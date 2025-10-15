@@ -19,4 +19,6 @@
   .text-balance { text-wrap: balance; }
   .shimmer { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.12) 37%, rgba(255,255,255,0.04) 63%); background-size: 400% 100%; animation: shimmer 1.2s ease-in-out infinite; }
   @keyframes shimmer { 0% { background-position: 100% 0 } 100% { background-position: 0 0 } }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
 }

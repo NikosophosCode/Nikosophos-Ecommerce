@@ -8,13 +8,16 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ## Progreso actual de la migración (2025-01-14)
 
-Estado general: **Fase 3 completada con éxito**. La aplicación React + Vite ahora cuenta con carrito funcional completo, acciones de favoritos integradas en ProductCard, y página de carrito con gestión de cantidades y totales.
+Estado general: **Fase 4 completada con éxito**. La aplicación ahora cuenta con navegación por categorías reales, filtrado de productos por categoría, y sincronización completa del estado de búsqueda con la URL mediante query parameters.
 
-- **Completado (Fase 2)**
+- **Completado (Fase 1)**
   - ✅ Proyecto React + Vite creado en `web/` con TypeScript
   - ✅ Tailwind v4 configurado con `@tailwindcss/vite`
   - ✅ Estilos base migrados (gradient, glass, shimmer)
   - ✅ Path aliases configurados (`@/*` → `./src/*`)
+  - ✅ ESLint + Prettier + TypeScript strict configurados
+
+- **Completado (Fase 2)**
   - ✅ Estructura de features modular: `features/products/{api,hooks,ui}`, `components/`, `lib/`, `app/{routes,store}`
   - ✅ TanStack Query integrado con hooks personalizados (`useProducts`, `useProduct`)
   - ✅ React Router configurado con 6 rutas: `/`, `/favorites`, `/cart`, `/profile`, `/contact`, `/category/:slug`
@@ -38,6 +41,17 @@ Estado general: **Fase 3 completada con éxito**. La aplicación React + Vite ah
   - ✅ Botón "Continuar compra" (stub para futuro checkout)
   - ✅ Estado vacío del carrito con enlace a la tienda
 
+- **Completado (Fase 4)**
+  - ✅ Feature categories creado: `features/categories/{hooks,ui}`
+  - ✅ Hook `useCategories` con TanStack Query (cache 10min/30min)
+  - ✅ Componente `CategoryNav` con navegación horizontal, estado activo y skeletons
+  - ✅ CategoryPage funcional con filtrado por categoryId desde URL params
+  - ✅ Sincronización de búsqueda con URL query params (`?q=...`) en HomePage y CategoryPage
+  - ✅ Deep linking: URLs reflejan estado completo (categoría + búsqueda)
+  - ✅ Header reorganizado con CategoryNav visible en todas las páginas
+  - ✅ Estilos `scrollbar-hide` para scroll horizontal limpio
+  - ✅ Manejo de errores y estados vacíos en CategoryPage
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
@@ -45,9 +59,11 @@ Estado general: **Fase 3 completada con éxito**. La aplicación React + Vite ah
   - ✅ Sin errores de compilación TypeScript
   - ✅ Persistencia de stores funcionando (localStorage)
   - ✅ Badges del Header sincronizados con stores
+  - ✅ Navegación por categorías funcional
+  - ✅ Query params sincronizados con URL
+  - ✅ Deep links funcionando correctamente
 
-- **Pendiente (Fases 4-10)**
-  - Fase 4: Categorías reales navegables desde la API + sincronización URL con query params
+- **Pendiente (Fases 5-10)**
   - Fase 5: Página de favoritos funcional con listado
   - Fase 6: Mejoras adicionales al carrito (descuentos, impuestos, etc. - opcional)
   - Fase 7: Autenticación y perfil de usuario
@@ -70,7 +86,12 @@ Estado general: **Fase 3 completada con éxito**. La aplicación React + Vite ah
 - Fase 1 — Scaffolding y fundamentos: ✅ COMPLETADA
 - Fase 2 — Home con paridad funcional: ✅ COMPLETADA (Header, búsqueda, filtros básicos, ProductDialog, toasts, routing, stores)
 - Fase 3 — Estado global: Carrito y Favoritos persistentes: ✅ COMPLETADA (CartPage, CartItem, badges funcionales, persistencia)
-- Fases 4-10: ⏳ Pendientes
+- Fase 4 — Routing: categorías reales y navegación: ✅ COMPLETADA (CategoryNav, filtrado, query params, deep linking)
+- Fases 5-10: ⏳ Pendientes
+
+**Documentación de fases:**
+- Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
+- Ver `web/FASE_4_RESUMEN.md` para detalles de Fase 4
 
 ---
 
@@ -198,20 +219,11 @@ Criterios de aceptación
 - Capa de datos productos (lista y detalle): hooks con TanStack Query.
 - Re-implementar búsqueda/orden/skeletons/overlay como en app actual.
 
-Estado: EN PROGRESO.
+Estado: ✅ COMPLETADA
 
-Completado
-- ProductGrid y ProductCard básicos.
-- Skeletons de carga y estilos `glass`/`shimmer`.
-- Fetch de productos con TanStack Query y manejo de error inicial.
-
-Pendiente
-- Header + SearchBar + filtros y orden.
-- Overlay accesible (Dialog) y toasts.
-
-Criterios de aceptación (sin cambios)
-- Home muestra productos, búsqueda y orden funcionan.
-- Overlay accesible (Escape, foco, click outside) y toasts operativos.
+Criterios de aceptación
+- ✅ Home muestra productos, búsqueda y orden funcionan.
+- ✅ Overlay accesible (Escape, foco, click outside) y toasts operativos.
 
 ---
 
@@ -221,9 +233,11 @@ Criterios de aceptación (sin cambios)
 - Añadir/Quitar/Modificar cantidades en carrito; toggle favoritos en card y dialog.
 - Formateo moneda con Intl (configurable).
 
+Estado: ✅ COMPLETADA
+
 Criterios de aceptación
-- Estado persiste entre recargas.
-- Acciones desde grid y overlay actualizan UI y badges.
+- ✅ Estado persiste entre recargas.
+- ✅ Acciones desde grid y overlay actualizan UI y badges.
 
 ---
 
@@ -233,9 +247,24 @@ Criterios de aceptación
 - Implementar `/category/:slug` con filtros por slug y URL source of truth.
 - Preservar query de búsqueda en URL (search params) para deep links.
 
+Estado: ✅ COMPLETADA
+
+Implementado
+- ✅ Feature `categories` con estructura modular (`hooks`, `ui`)
+- ✅ Hook `useCategories` con TanStack Query y cache optimizado
+- ✅ Componente `CategoryNav` con navegación horizontal y estado activo
+- ✅ CategoryPage funcional con filtrado por categoryId
+- ✅ Sincronización de búsqueda con URL (`useSearchParams`)
+- ✅ Deep linking completo (URL refleja categoría + búsqueda)
+- ✅ Header con CategoryNav integrado
+- ✅ Estilos `scrollbar-hide` para UX limpia
+
 Criterios de aceptación
-- Navegación por categorías cambia resultados y URL.
-- Refresco mantiene estado de la vista (query/sort/categoría).
+- ✅ Navegación por categorías cambia resultados y URL.
+- ✅ Refresco mantiene estado de la vista (query/sort/categoría).
+- ✅ Deep links funcionan correctamente.
+
+Ver detalles: `web/FASE_4_RESUMEN.md`
 
 ---
 
