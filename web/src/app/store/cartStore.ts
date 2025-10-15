@@ -1,6 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { CartItem } from '@/lib/types'
+import type { CartItem, Product } from '@/lib/types'
+
+export type CartItemWithProduct = CartItem & {
+  product: Product
+}
 
 type CartStore = {
   items: Record<number, CartItem>
@@ -9,7 +13,6 @@ type CartStore = {
   updateQuantity: (productId: number, quantity: number) => void
   clearCart: () => void
   getTotalItems: () => number
-  getTotalPrice: (prices: Record<number, number>) => number
 }
 
 export const useCartStore = create<CartStore>()(
@@ -34,6 +37,7 @@ export const useCartStore = create<CartStore>()(
 
       removeItem: (productId) => {
         set((state) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { [productId]: _, ...rest } = state.items
           return { items: rest }
         })
@@ -57,16 +61,13 @@ export const useCartStore = create<CartStore>()(
       getTotalItems: () => {
         return Object.values(get().items).reduce((sum, item) => sum + item.quantity, 0)
       },
-
-      getTotalPrice: (prices) => {
-        return Object.values(get().items).reduce((sum, item) => {
-          const price = prices[item.productId] || 0
-          return sum + price * item.quantity
-        }, 0)
-      },
     }),
     {
       name: 'cart-storage',
     }
   )
 )
+
+// Selectores externos (no causan re-renders infinitos)
+export const selectCartItems = (state: CartStore) => Object.values(state.items)
+export const selectHasItems = (state: CartStore) => Object.keys(state.items).length > 0

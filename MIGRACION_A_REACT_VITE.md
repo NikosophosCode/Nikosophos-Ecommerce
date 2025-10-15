@@ -8,7 +8,7 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ## Progreso actual de la migración (2025-01-14)
 
-Estado general: **Fase 2 completada con éxito**. La aplicación React + Vite ahora cuenta con arquitectura modular, routing, estado global persistente, búsqueda funcional y componentes accesibles.
+Estado general: **Fase 3 completada con éxito**. La aplicación React + Vite ahora cuenta con carrito funcional completo, acciones de favoritos integradas en ProductCard, y página de carrito con gestión de cantidades y totales.
 
 - **Completado (Fase 2)**
   - ✅ Proyecto React + Vite creado en `web/` con TypeScript
@@ -26,18 +26,30 @@ Estado general: **Fase 2 completada con éxito**. La aplicación React + Vite ah
   - ✅ Acciones de carrito y favoritos funcionando (añadir/quitar con feedback visual)
   - ✅ Búsqueda de productos en vivo integrada en Header
 
+- **Completado (Fase 3)**
+  - ✅ cartStore mejorado con selectores optimizados (`getItemsArray`, `hasItems`)
+  - ✅ Componente CartItem reutilizable con imagen, controles de cantidad y botón eliminar
+  - ✅ CartPage completa con lista de productos, subtotal, total y estado vacío
+  - ✅ Botones de favoritos y añadir al carrito en ProductCard con feedback visual
+  - ✅ Integración de toasts (Sonner) para acciones de carrito y favoritos
+  - ✅ Persistencia de carrito validada (localStorage)
+  - ✅ Formateo de moneda con Intl.NumberFormat (USD, locale es-ES)
+  - ✅ Botón "Vaciar carrito" con confirmación
+  - ✅ Botón "Continuar compra" (stub para futuro checkout)
+  - ✅ Estado vacío del carrito con enlace a la tienda
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
   - ✅ Dev server: PASS (http://localhost:5174/)
   - ✅ Sin errores de compilación TypeScript
   - ✅ Persistencia de stores funcionando (localStorage)
+  - ✅ Badges del Header sincronizados con stores
 
-- **Pendiente (Fases 3-10)**
-  - Fase 3: Implementación completa de página de carrito con totales y gestión de cantidades
+- **Pendiente (Fases 4-10)**
   - Fase 4: Categorías reales navegables desde la API + sincronización URL con query params
   - Fase 5: Página de favoritos funcional con listado
-  - Fase 6: Carrito funcional completo (vista detallada con tabla, cantidades, totales)
+  - Fase 6: Mejoras adicionales al carrito (descuentos, impuestos, etc. - opcional)
   - Fase 7: Autenticación y perfil de usuario
   - Fase 8: Formulario de contacto completo con validación
   - Fase 9: Optimizaciones de rendimiento (lazy loading, prefetch, virtualización)
@@ -57,7 +69,8 @@ Estado general: **Fase 2 completada con éxito**. La aplicación React + Vite ah
 **Resumen por fases**
 - Fase 1 — Scaffolding y fundamentos: ✅ COMPLETADA
 - Fase 2 — Home con paridad funcional: ✅ COMPLETADA (Header, búsqueda, filtros básicos, ProductDialog, toasts, routing, stores)
-- Fases 3-10: ⏳ Pendientes
+- Fase 3 — Estado global: Carrito y Favoritos persistentes: ✅ COMPLETADA (CartPage, CartItem, badges funcionales, persistencia)
+- Fases 4-10: ⏳ Pendientes
 
 ---
 
