@@ -8,7 +8,8 @@ type HeaderProps = {
 }
 
 export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
-  const totalItems = useCartStore((state) => state.getTotalItems())
+  const items = useCartStore((state) => state.items)
+  const totalItems = Object.values(items).reduce((sum, item) => sum + item.quantity, 0)
   const favoritesCount = useFavoritesStore((state) => state.favorites.size)
 
   return (

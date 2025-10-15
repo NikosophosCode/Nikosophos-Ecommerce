@@ -12,7 +12,6 @@ type CartStore = {
   removeItem: (productId: number) => void
   updateQuantity: (productId: number, quantity: number) => void
   clearCart: () => void
-  getTotalItems: () => number
 }
 
 export const useCartStore = create<CartStore>()(
@@ -57,17 +56,9 @@ export const useCartStore = create<CartStore>()(
       },
 
       clearCart: () => set({ items: {} }),
-
-      getTotalItems: () => {
-        return Object.values(get().items).reduce((sum, item) => sum + item.quantity, 0)
-      },
     }),
     {
       name: 'cart-storage',
     }
   )
 )
-
-// Selectores externos (no causan re-renders infinitos)
-export const selectCartItems = (state: CartStore) => Object.values(state.items)
-export const selectHasItems = (state: CartStore) => Object.keys(state.items).length > 0

@@ -1,32 +1,38 @@
 import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
 import { Header } from '@/components/Header'
-import { useCartStore, selectCartItems, selectHasItems } from '@/app/store/cartStore'
+import { useCartStore } from '@/app/store/cartStore'
 import { useProducts } from '@/features/products/hooks/useProducts'
 import { CartItem } from '@/features/cart/ui/CartItem'
 import { formatCurrency } from '@/lib/utils'
 import { toast } from 'sonner'
 
 export function CartPage() {
-  const cartItems = useCartStore(selectCartItems)
+  const items = useCartStore((state) => state.items)
   const clearCart = useCartStore((state) => state.clearCart)
-  const hasItems = useCartStore(selectHasItems)
 
-  // Obtener IDs de productos en el carrito
-  const productIds = cartItems.map((item) => item.productId)
-
-  // Fetch productos (esto traerá todos los productos, pero podríamos optimizar con query específica)
+  // Fetch productos
   const { data: products = [], isLoading } = useProducts({})
 
-  // Filtrar solo los productos que están en el carrito
-  const cartProducts = products.filter((p) => productIds.includes(p.id))
+  // Memoizar cálculos derivados
+  const { cartItems, hasItems, cartProducts, subtotal, total } = useMemo(() => {
+    const itemsArray = Object.values(items)
+    const productIds = itemsArray.map((item) => item.productId)
+    const filteredProducts = products.filter((p) => productIds.includes(p.id))
+    
+    const calculatedSubtotal = itemsArray.reduce((sum, item) => {
+      const product = filteredProducts.find((p) => p.id === item.productId)
+      return sum + (product?.price || 0) * item.quantity
+    }, 0)
 
-  // Calcular totales
-  const subtotal = cartItems.reduce((sum, item) => {
-    const product = cartProducts.find((p) => p.id === item.productId)
-    return sum + (product?.price || 0) * item.quantity
-  }, 0)
-
-  const total = subtotal // Aquí podríamos añadir impuestos, descuentos, etc.
+    return {
+      cartItems: itemsArray,
+      hasItems: itemsArray.length > 0,
+      cartProducts: filteredProducts,
+      subtotal: calculatedSubtotal,
+      total: calculatedSubtotal
+    }
+  }, [items, products])
 
   const handleClearCart = () => {
     if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
