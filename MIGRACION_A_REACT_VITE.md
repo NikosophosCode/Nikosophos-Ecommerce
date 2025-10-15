@@ -6,40 +6,58 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ---
 
-## Progreso actual de la migración (2025-10-14)
+## Progreso actual de la migración (2025-01-14)
 
-Estado general: se completó el scaffolding base en `web/` con React + Vite + TypeScript y Tailwind v4, y se implementó una Home mínima que lista productos desde la API usando TanStack Query.
+Estado general: **Fase 2 completada con éxito**. La aplicación React + Vite ahora cuenta con arquitectura modular, routing, estado global persistente, búsqueda funcional y componentes accesibles.
 
-- Hecho
-  - Proyecto React + Vite creado en `web/` con TypeScript.
-  - Tailwind v4 configurado con `@tailwindcss/vite` en `vite.config.ts`.
-  - Estilos base migrados: gradient, `glass`, `shimmer`, utilidades comunes en `web/src/index.css`.
-  - `main.tsx`: envuelto con `QueryClientProvider` (TanStack Query).
-  - `App.tsx`: Home con grid de productos, tarjetas, skeletons, fallback de imágenes y manejo de error básico.
-  - `package.json` de `web/` unificado y dependencias instaladas (React 19, Vite 7, Tailwind v4, TanStack Query).
-  - Verificación local: `npm run dev` (en `web/`) y `npm run build` (Build PASS).
+- **Completado (Fase 2)**
+  - ✅ Proyecto React + Vite creado en `web/` con TypeScript
+  - ✅ Tailwind v4 configurado con `@tailwindcss/vite`
+  - ✅ Estilos base migrados (gradient, glass, shimmer)
+  - ✅ Path aliases configurados (`@/*` → `./src/*`)
+  - ✅ Estructura de features modular: `features/products/{api,hooks,ui}`, `components/`, `lib/`, `app/{routes,store}`
+  - ✅ TanStack Query integrado con hooks personalizados (`useProducts`, `useProduct`)
+  - ✅ React Router configurado con 6 rutas: `/`, `/favorites`, `/cart`, `/profile`, `/contact`, `/category/:slug`
+  - ✅ Zustand stores con persistencia: `cartStore` y `favoritesStore`
+  - ✅ Header con búsqueda en vivo, badges de carrito/favoritos sincronizados
+  - ✅ ProductCard, ProductGrid, ProductSkeleton separados en módulos
+  - ✅ ProductDialog accesible con Headless UI (Dialog con transiciones, focus trap, ESC close)
+  - ✅ Sistema de toasts con Sonner
+  - ✅ Acciones de carrito y favoritos funcionando (añadir/quitar con feedback visual)
+  - ✅ Búsqueda de productos en vivo integrada en Header
 
-- Pendiente inmediato
-  - Separar componentes (Header, ProductCard/Grid, Dialog) en `features/products/ui`.
-  - Routing con React Router y estructura de páginas (Home, Categorías, Favoritos, Carrito, Perfil, Contacto).
-  - Estado global con Zustand + `persist` para carrito y favoritos.
-  - Toasts (sonner o react-hot-toast) y overlay accesible (Radix/Headless UI).
+- **Verificado**
+  - ✅ Build: PASS (`npm run build` - producción)
+  - ✅ Typecheck: PASS (tsc -b en build)
+  - ✅ Dev server: PASS (http://localhost:5174/)
+  - ✅ Sin errores de compilación TypeScript
+  - ✅ Persistencia de stores funcionando (localStorage)
 
-- Nota de ejecución
-  - Ejecutar el dev server desde `web/`:
-    - PowerShell: `cd web; npm run dev`
-  - Evitar `npm run dev` en la raíz del proyecto clásico para no invocar el CLI de Tailwind de la app antigua por accidente.
+- **Pendiente (Fases 3-10)**
+  - Fase 3: Implementación completa de página de carrito con totales y gestión de cantidades
+  - Fase 4: Categorías reales navegables desde la API + sincronización URL con query params
+  - Fase 5: Página de favoritos funcional con listado
+  - Fase 6: Carrito funcional completo (vista detallada con tabla, cantidades, totales)
+  - Fase 7: Autenticación y perfil de usuario
+  - Fase 8: Formulario de contacto completo con validación
+  - Fase 9: Optimizaciones de rendimiento (lazy loading, prefetch, virtualización)
+  - Fase 10: Tests unitarios, E2E y CI/CD
 
-Quality gates (web/)
-- Build: PASS (vite build)
-- Typecheck: PASS (tsc -b dentro de `npm run build`)
-- Lint: No ejecutado aún (pendiente configuración/ejecución)
-- Tests: No aplican todavía
+- **Nota de ejecución**
+  - Ejecutar dev server: `cd web; npm run dev` (http://localhost:5174/)
+  - Build producción: `cd web; npm run build`
+  - Preview: `cd web; npm run preview`
 
-Resumen por fases
-- Fase 1 — Scaffolding y fundamentos: COMPLETADA (React+TS, Tailwind v4, Query provider). Router y Zustand se abordarán en Fases 3–4.
-- Fase 2 — Home con paridad funcional: EN PROGRESO (Grid, tarjetas, skeletons, fetch hechos; pendientes Header/Filters/Search/Orden/Overlay/Toasts).
-- Resto de fases: sin cambios (ver plan).
+**Quality gates (web/)**
+- Build: ✅ PASS
+- Typecheck: ✅ PASS
+- Lint: ⏳ Pendiente configuración/ejecución
+- Tests: ⏳ No implementados
+
+**Resumen por fases**
+- Fase 1 — Scaffolding y fundamentos: ✅ COMPLETADA
+- Fase 2 — Home con paridad funcional: ✅ COMPLETADA (Header, búsqueda, filtros básicos, ProductDialog, toasts, routing, stores)
+- Fases 3-10: ⏳ Pendientes
 
 ---
 
