@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tu-dominio.vercel.app/sitemap.xml
+
+# Disallow admin/auth pages (future)
+# Disallow: /admin/

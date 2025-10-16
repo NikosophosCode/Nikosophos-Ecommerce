@@ -1,197 +1,217 @@
-# Nikosophos Store
+# Nikosophos Store - React + Vite
 
-Aplicación web estática (sin framework) que muestra un catálogo de productos consumidos desde la API pública de Platzi Store (`api.escuelajs.co`). Usa Tailwind CSS v4 (CLI) y JavaScript vanilla para: filtrado, ordenamiento, favoritos, carrito (en memoria), búsqueda en vivo, overlays de producto y toasts.
+Migración completa de la aplicación a React con Vite, TypeScript y Tailwind v4.
 
-## Tabla de Contenidos
-- [Demo Local](#demo-local)
-- [Características](#características)
-- [Arquitectura y Flujo](#arquitectura-y-flujo)
-- [Estructura de Carpetas](#estructura-de-carpetas)
-- [Dependencias](#dependencias)
-- [Scripts NPM](#scripts-npm)
-- [HTML / Accesibilidad](#html--accesibilidad)
-- [CSS / Tailwind](#css--tailwind)
-- [JavaScript (Estado y Módulos Lógicos)](#javascript-estado-y-módulos-lógicos)
-- [Manejo de Datos / API](#manejo-de-datos--api)
-- [Gestión de UI Dinámica](#gestión-de-ui-dinámica)
-- [Rendimiento](#rendimiento)
-- [Buenas Prácticas Implementadas](#buenas-prácticas-implementadas)
-- [Posibles Mejoras Futuras](#posibles-mejoras-futuras)
-- [Guía de Contribución](#guía-de-contribución)
-- [Licencia](#licencia)
+## 🎯 Estado Actual - Fase 2 Completada
 
-## Demo Local
+✅ **Arquitectura modular implementada**
+- Features organizadas por dominio (`products`, próximamente `cart`, `favorites`, etc.)
+- Separación clara de responsabilidades (api, hooks, ui)
+- Stores globales con Zustand + persistencia
+- Routing con React Router
+
+✅ **Funcionalidades disponibles**
+- ✨ Listado de productos con búsqueda en vivo
+- 🛒 Carrito de compras persistente (añadir productos)
+- ❤️ Sistema de favoritos persistente
+- 🔍 Búsqueda en tiempo real
+- 📱 UI responsive con Tailwind v4
+- 🎨 Componentes accesibles (Headless UI)
+- 🔔 Sistema de notificaciones (Sonner)
+- 🚀 Navegación por rutas
+
+## 🚀 Comandos
+
 ```bash
-git clone <repo-url>
-cd practica
-npm install
+# Desarrollo
 npm run dev
-# Abre index.html con Live Server o un server estático
-```
-El CSS compilado se genera en `src/styles.css` (ignorado por Git, ver [.gitignore](.gitignore)).
 
-## Características
-- Catálogo dinámico con datos remotos (fetch).
-- Búsqueda en vivo (input desktop + mobile).
-- Filtros por categoría (placeholder lógico, actualmente “all” / “nuevo”).
-- Ordenamiento por precio (asc / desc).
-- Carrito (conteo en badge, estado en memoria).
-- Favoritos (persistidos en la sesión mientras dure la recarga).
-- Overlay de detalle de producto (fetch puntual si no está en cache inicial).
-- Skeleton loading (mejora percepción de velocidad).
-- Toasts ligeros para feedback.
-- Modo responsive + estilos “glass” + animaciones suaves.
-- Accesibilidad básica: roles, aria-label, focus management en overlay, escape close.
+# Build de producción
+npm run build
 
-## Arquitectura y Flujo
-1. Al cargar el documento (`DOMContentLoaded`) se invoca `init()` en [`src/index.js`](src/index.js).
-2. `init()`:
-   - Renderiza skeletons (`renderSkeletons`).
-   - Enlaza eventos de cabecera y footer (`wireHeader`, `wireFooter`).
-   - Hace fetch de productos (`fetchData`).
-   - Actualiza `state.products`, aplica filtros (`applyFilters`) y renderiza (`render`).
-3. Las interacciones del grid delegan en un solo listener (`onGridClick`):
-   - Botón “Añadir al carrito” → incrementa `Map cart`.
-   - Botón “Favorito” → toggle en `Set favs`.
-   - Click fuera de botón sobre tarjeta → abre overlay (`openProductOverlay`).
-4. Overlay permite añadir al carrito / favorito y cierra con click backdrop o Escape.
+# Preview del build
+npm run preview
 
-## Estructura de Carpetas
-```
-.
-├── index.html
-├── package.json
-├── .gitignore
-├── .vscode/
-│   └── settings.json
-├── assets/
-│   ├── icons/        # (vacío o para futuros íconos)
-│   └── img/          # (reservado para imágenes locales)
-└── src/
-    ├── tailwind.css  # Fuente Tailwind + capas personalizadas
-    ├── styles.css    # (generado) salida del build
-    └── index.js      # Lógica principal
+# Lint
+npm run lint
 ```
 
-## Dependencias
-Declaradas en [package.json](package.json):
-- `tailwindcss` y `@tailwindcss/cli` (v4.*).  
-No se usan frameworks JS: enfoque minimalista.
+## 📁 Estructura del Proyecto
 
-## Scripts NPM
-| Script | Descripción |
-|--------|-------------|
-| `npm run dev` | Compila Tailwind en watch: lee `src/tailwind.css` → genera `src/styles.css`. |
-| `npm run build` | Compila y minifica Tailwind para producción. |
-
-## HTML / Accesibilidad
-Archivo principal: [index.html](index.html)
-- Semántica: `<header>`, `<main>`, `<section>`, `<footer>`, `<nav>`, `<template>`.
-- Overlay: `role="dialog"`, `aria-modal="true"`, focus retorna al previo al cerrar.
-- Botones con `aria-label` en íconos (menu, favoritos, carrito, social).
-- Mejora posible: ciclo de foco (focus trap) dentro del overlay.
-
-## CSS / Tailwind
-Fuente: [src/tailwind.css](src/tailwind.css)
-- Import global: `@import "tailwindcss";`
-- Capas personalizadas `@layer base` y `@layer utilities`.
-- Variables CSS para glass: `--glass-bg`, `--glass-brd`.
-- Utilidades personalizadas:
-  - `.glass` (backdrop blur + transparencia)
-  - `.shimmer` + `@keyframes shimmer`
-  - `.text-balance` (usa `text-wrap: balance`)
-  - `.tap-highlight-none` (mejor UX móvil)
-
-Generado: `src/styles.css` (no se versiona para evitar ruido de build).
-
-## JavaScript (Estado y Módulos Lógicos)
-Archivo: [src/index.js](src/index.js)
-
-Estado central:
-```js
-const state = {
-  products: [],
-  filtered: [],
-  cart: new Map(),
-  favs: new Set(),
-  query: '',
-  category: 'all',
-  sort: 'default'
-};
+```
+web/
+├── src/
+│   ├── app/
+│   │   ├── routes/          # Páginas de la aplicación
+│   │   │   ├── HomePage.tsx
+│   │   │   ├── CartPage.tsx
+│   │   │   ├── FavoritesPage.tsx
+│   │   │   ├── ProfilePage.tsx
+│   │   │   ├── ContactPage.tsx
+│   │   │   └── CategoryPage.tsx
+│   │   └── store/           # Estado global (Zustand)
+│   │       ├── cartStore.ts
+│   │       └── favoritesStore.ts
+│   ├── components/          # Componentes compartidos
+│   │   └── Header.tsx
+│   ├── features/            # Módulos por dominio
+│   │   └── products/
+│   │       ├── api/         # Servicios de API
+│   │       │   └── products.api.ts
+│   │       ├── hooks/       # Custom hooks
+│   │       │   └── useProducts.ts
+│   │       └── ui/          # Componentes UI
+│   │           ├── ProductCard.tsx
+│   │           ├── ProductGrid.tsx
+│   │           ├── ProductSkeleton.tsx
+│   │           └── ProductDialog.tsx
+│   ├── lib/                 # Utilidades y constantes
+│   │   ├── types.ts
+│   │   ├── constants.ts
+│   │   └── utils.ts
+│   ├── App.tsx              # Router principal
+│   ├── main.tsx             # Entry point
+│   └── index.css            # Estilos globales
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-Funciones clave (todas en el mismo módulo):
-- [`fetchData`](src/index.js): obtiene listado inicial (manejo de error con toast).
-- [`pickSafeImage`](src/index.js): evita imágenes rotas / dominios no confiables.
-- [`renderSkeletons`](src/index.js): placeholders mientras se hace fetch.
-- [`card`](src/index.js): genera HTML de cada producto (template string).
-- [`openProductOverlay`](src/index.js): carga y muestra detalle (with a11y improvements).
-- [`applyFilters`](src/index.js): aplica búsqueda, categoría, ordenamiento.
-- [`render`](src/index.js): pinta grid según `state.filtered`.
-- [`updateBadges`](src/index.js): actualiza contadores de carrito y favoritos.
-- [`wireHeader`](src/index.js), [`wireFooter`](src/index.js): listeners y UI wiring.
-- [`toast`](src/index.js): feedback temporal.
+## 🛠 Stack Tecnológico
 
-Formato moneda: `Intl.NumberFormat` (configurable vía `LOCALE` y `CURRENCY`).
+- **Framework**: React 19
+- **Build Tool**: Vite 7
+- **Lenguaje**: TypeScript
+- **Estilos**: Tailwind CSS v4
+- **Routing**: React Router
+- **Estado Global**: Zustand con middleware de persistencia
+- **Data Fetching**: TanStack Query (React Query)
+- **UI Components**: Headless UI
+- **Notificaciones**: Sonner
+- **API**: Platzi Fake Store API
 
-## Manejo de Datos / API
-- Endpoint listado: `GET https://api.escuelajs.co/api/v1/products?offset=0&limit=44`
-- Detalle puntual: `GET https://api.escuelajs.co/api/v1/products/:id`
-- No hay persistencia local (ni localStorage) por decisión de simplicidad (puede añadirse).
+## 🔧 Configuración
 
-## Gestión de UI Dinámica
-Patrones usados:
-- Delegación de eventos en el grid (`onGridClick`) reduce listeners.
-- Reemplazo completo de tarjetas al togglear favorito (simplicidad sobre diff).
-- Overlay clonado desde `<template>` para mantener HTML limpio.
-- Badges se ocultan añadiendo clase `hidden` si el conteo es 0 (menor ruido visual).
+### Path Aliases
+Se configuró el alias `@` para imports absolutos:
 
-## Rendimiento
-Optimización ligera:
-- Skeletons mejoran percepción (no bloquea).
-- `requestAnimationFrame` usado al abrir overlay / menú para transiciones.
-- Imágenes con `loading="lazy"`.
-- Re-render controlado (solo cuando cambian filtros).
-- Plantillas string sin frameworks (menor overhead inicial).
+```typescript
+import { Product } from '@/lib/types'
+import { useProducts } from '@/features/products/hooks/useProducts'
+```
 
-Potenciales mejoras:
-- Virtualización si aumenta el volumen de productos.
-- Cache de responses (Map) para llamadas de detalle.
-- Persistir favoritos/carrito en `localStorage`.
+### Stores Persistentes
+Los stores de carrito y favoritos usan `localStorage` automáticamente:
 
-## Buenas Prácticas Implementadas
-- Código autodescriptivo con nombres cortos pero claros (`applyFilters`, `updateBadges`).
-- Manejo de errores en fetch con fallback UI (`toast` de error).
-- Separación visual / lógica (Tailwind + JS modular dentro de un solo archivo).
-- Accesibilidad mínima (aria-labels, manejo de foco parcial).
-- Evita inline styles salvo fallback en transiciones.
-- Evita side-effects globales innecesarios (todo arranca en `DOMContentLoaded`).
+```typescript
+// Se persiste automáticamente
+const addToCart = useCartStore(state => state.addItem)
+addToCart(productId, quantity)
 
-## Posibles Mejoras Futuras
-Categoría | Idea
---------- | ----
-Persistencia | Guardar favoritos y carrito en `localStorage`.
-Rendimiento | Pre-carga condicional de imágenes en viewport (IntersectionObserver).
-Accesibilidad | Focus trap completo en overlay, aria-live para toasts.
-Arquitectura | Separar estado y vista en módulos (store.js / ui.js).
-Testing | Añadir pruebas con Vitest / Jest para helpers (`pickSafeImage`, form validation).
-UX | Paginación o “infinite scroll”.
-i18n | Sistema de traducciones (es/en) abstraído.
-SEO | Etiquetas meta extendidas, JSON-LD para productos.
-Seguridad | Sanitizar entradas de usuario (búsqueda) aunque riesgo actual es bajo.
-CI/CD | Workflow GitHub Actions (lint + build).
-Design System | Documentar utilidades y tokens (glass, spacing, color roles).
+// Se restaura al recargar la página
+const favorites = useFavoritesStore(state => state.favorites)
+```
 
-## Guía de Contribución
-1. Haz fork y crea rama: `feat/nueva-funcionalidad`.
-2. Instala dependencias y corre `npm run dev`.
-3. Asegura consistencia visual (usa utilidades Tailwind existentes).
-4. No commitees `src/styles.css`.
-5. Abre PR con descripción clara (qué, por qué, cómo).
+## 🌐 Rutas Disponibles
 
-## Licencia
-MIT
+- `/` - Home (listado de productos)
+- `/cart` - Carrito de compras
+- `/favorites` - Productos favoritos
+- `/category/:slug` - Productos por categoría
+- `/profile` - Perfil de usuario
+- `/contact` - Formulario de contacto
 
----
+## 📝 Próximas Fases
 
-Hecho con Tailwind CSS y JavaScript Vanilla.
+### Fase 3 - Carrito Funcional Completo
+- [ ] Vista detallada del carrito con tabla
+- [ ] Control de cantidades
+- [ ] Cálculo de totales
+- [ ] Botón "Vaciar carrito"
+
+### Fase 4 - Categorías Navegables
+- [ ] Obtener categorías reales de la API
+- [ ] Menú de categorías en Header
+- [ ] Filtrado por categoría
+- [ ] URL params para deep linking
+
+### Fase 5 - Página de Favoritos
+- [ ] Listado completo de favoritos
+- [ ] Acciones (quitar, añadir al carrito)
+- [ ] Estado vacío
+
+### Fases 6-10
+Ver `../MIGRACION_A_REACT_VITE.md` para el plan completo.
+
+## 🎨 Componentes Destacados
+
+### ProductDialog
+Dialog accesible con Headless UI que muestra:
+- Imagen del producto
+- Descripción completa
+- Precio
+- Botones para añadir al carrito y favoritos
+- Transiciones suaves
+- Focus trap y cierre con ESC
+
+### Header
+Header sticky con:
+- Logo y navegación
+- Barra de búsqueda en vivo
+- Badges de carrito y favoritos (con contador)
+- Responsive (mobile-first)
+
+### ProductGrid
+Grid responsive de productos con:
+- Skeletons mientras carga
+- Estados de error
+- Lazy loading de imágenes
+- Hover effects
+
+## 📊 Quality Gates
+
+- ✅ Build: PASS
+- ✅ Typecheck: PASS
+- ⏳ Lint: Pendiente
+- ⏳ Tests: Pendiente
+
+## 🐛 Troubleshooting
+
+### Puerto en uso
+Si el puerto 5173 está ocupado, Vite automáticamente usa el siguiente disponible (5174, 5175, etc.)
+
+### Errores de path alias
+Asegúrate de que `tsconfig.app.json` tenga configurado:
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+import reactDom from 'eslint-plugin-react-dom'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```

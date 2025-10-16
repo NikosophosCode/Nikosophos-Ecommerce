@@ -1,165 +1,45 @@
-# ───────────────────────────────
-# Sistema / SO
-# ───────────────────────────────
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# ───────────────────────────────
-# Dependencias / Node
-# ───────────────────────────────
-node_modules/
-.npm/
-.pnp.*
-.pnpm-debug.log*
-
-# ───────────────────────────────
-# Logs
-# ───────────────────────────────
-logs/
+﻿# Logs
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 lerna-debug.log*
 
-# ───────────────────────────────
-# Entornos / Variables
-# (mantén .env.example versionado)
-# ───────────────────────────────
-.env
-.env.*.local
-!.env.example
-
-# ───────────────────────────────
-# Salidas de build / cachés
-# ───────────────────────────────
-dist/
-build/
-coverage/
-.nyc_output/
-.cache/
-.tmp/
-.temp/
-
-# TypeScript (por si se agrega luego)
-*.tsbuildinfo
-
-# ───────────────────────────────
-# Tailwind (artefacto compilado)
-# ───────────────────────────────
-# styles.css es generado a partir de src/tailwind.css
-src/styles.css
-src/styles.css.map
-
-# ───────────────────────────────
-# Editores / IDE
-# ───────────────────────────────
-.vscode/*
-!.vscode/extensions.json   # recomendaciones de extensiones (opcional mantener)
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-
-# Vim / otros editores
-*~
-*.swp
-*.swo
-
-# ───────────────────────────────
-# Otros
-# ───────────────────────────────
-*.tgz
-*.local
-*.tmp
-*.temp
-```// filepath: c:\Users\nicon\OneDrive\Documents\Cursos\CursoEmpaquetadoresWeb\Practica\.gitignore
-# ───────────────────────────────
-# Sistema / SO
-# ───────────────────────────────
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# ───────────────────────────────
-# Dependencias / Node
-# ───────────────────────────────
+# Dependencies
 node_modules/
-.npm/
-.pnp.*
-.pnpm-debug.log*
-
-# ───────────────────────────────
-# Logs
-# ───────────────────────────────
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-
-# ───────────────────────────────
-# Entornos / Variables
-# (mantén .env.example versionado)
-# ───────────────────────────────
-.env
-.env.*.local
-!.env.example
-
-# ───────────────────────────────
-# Salidas de build / cachés
-# ───────────────────────────────
 dist/
-build/
-coverage/
-.nyc_output/
-.cache/
-.tmp/
-.temp/
+dist-ssr/
+*.local
 
-# TypeScript (por si se agrega luego)
-*.tsbuildinfo
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.development.local
+.env.test.local
 
-# ───────────────────────────────
-# Tailwind (artefacto compilado)
-# ───────────────────────────────
-# styles.css es generado a partir de src/tailwind.css
-src/styles.css
-src/styles.css.map
-
-# ───────────────────────────────
-# Editores / IDE
-# ───────────────────────────────
+# Editor
 .vscode/*
-!.vscode/extensions.json   # recomendaciones de extensiones (opcional mantener)
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
+.DS_Store
 *.suo
 *.ntvs*
-*.njsproj
+*.njsproj*
 *.sln
+*.sw?
 
-# Vim / otros editores
-*~
-*.swp
-*.swo
+# Vercel
+.vercel
 
-# ───────────────────────────────
-# Otros
-# ───────────────────────────────
-*.tgz
-*.local
-*.tmp
-*.temp
+# OS
+Thumbs.db
+
+# Build artifacts
+build/
+
+# Testing
+coverage/
