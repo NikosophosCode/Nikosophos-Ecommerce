@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Scaffold Vite React TS app",
+			"type": "shell",
+			"command": "npm create vite@latest web -- --template react-ts",
+			"args": [],
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}
