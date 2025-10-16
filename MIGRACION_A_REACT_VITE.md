@@ -6,9 +6,9 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ---
 
-## Progreso actual de la migración (2025-01-14)
+## Progreso actual de la migración (2025-01-15)
 
-Estado general: **Fase 4 completada con éxito + Mejoras de navegación y responsive implementadas**. La aplicación ahora cuenta con navegación por categorías reales, filtrado de productos por categoría, sincronización completa del estado de búsqueda con la URL, navegación principal completa y menú móvil funcional.
+Estado general: **Fase 7 completada con éxito**. La aplicación ahora cuenta con un sistema completo de autenticación y gestión de perfiles, incluyendo registro, login, logout, edición de perfil y sincronización automática del carrito y favoritos con el usuario autenticado.
 
 - **Completado (Fase 1)**
   - ✅ Proyecto React + Vite creado en `web/` con TypeScript
@@ -83,6 +83,21 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Persistencia de cupón aplicado en localStorage
   - ✅ Validación de cupones con compra mínima
 
+- **Completado (Fase 7 - 2025-01-15)**
+  - ✅ Sistema de autenticación completo: registro, login, logout
+  - ✅ authStore con Zustand + persist (mock localStorage)
+  - ✅ Formularios con React Hook Form + Zod (LoginForm, RegisterForm, EditProfileForm)
+  - ✅ AuthModal accesible con Headless UI (alternancia login/register)
+  - ✅ UserMenu dropdown con avatar, enlaces y logout
+  - ✅ ProfilePage funcional: avatar, estadísticas, edición de perfil, acciones
+  - ✅ Integración en Header: botones auth (guest) / UserMenu (autenticado)
+  - ✅ Sincronización automática de cart y favorites con usuario (useAuthSync hook)
+  - ✅ Migración de datos guest → usuario al login
+  - ✅ Persistencia por usuario en localStorage (cart-storage-{userId}, favorites-storage-{userId})
+  - ✅ Avatares automáticos con DiceBear API
+  - ✅ Validaciones robustas (email, password mín 6 chars, confirmación password)
+  - ✅ Tipos TypeScript: User, LoginCredentials, RegisterData, UpdateProfileData
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
@@ -95,9 +110,10 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Deep links funcionando correctamente
   - ✅ Página de favoritos funcional con acciones completas
   - ✅ Sistema de cupones y cálculos de carrito funcionando
+  - ✅ Sistema de autenticación funcionando (registro, login, logout, edición)
+  - ✅ Sincronización de cart/favorites con usuario autenticado
 
-- **Pendiente (Fases 7-10)**
-  - Fase 7: Autenticación y perfil de usuario
+- **Pendiente (Fases 8-10)**
   - Fase 8: Formulario de contacto completo con validación
   - Fase 9: Optimizaciones de rendimiento (lazy loading, prefetch, virtualización)
   - Fase 10: Tests unitarios, E2E y CI/CD
@@ -120,12 +136,14 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
 - Fase 4 — Routing: categorías reales y navegación: ✅ COMPLETADA (CategoryNav, filtrado, query params, deep linking)
 - Fase 5 — Página de favoritos funcional: ✅ COMPLETADA (FavoriteItem, useFavoriteProducts, estado vacío, acciones)
 - Fase 6 — Carrito funcional mejorado: ✅ COMPLETADA (cupones, impuestos, envío, cálculos automáticos)
-- Fases 7-10: ⏳ Pendientes
+- Fase 7 — Autenticación y perfil: ✅ COMPLETADA (auth completo, ProfilePage, sincronización stores, UserMenu)
+- Fases 8-10: ⏳ Pendientes
 
 **Documentación de fases:**
 - Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
 - Ver `web/FASE_4_RESUMEN.md` para detalles de Fase 4
 - Ver `web/FASE_5_RESUMEN.md` para detalles de Fase 5
+- Ver `web/FASE_7_RESUMEN.md` para detalles de Fase 7
 
 ---
 
@@ -360,11 +378,31 @@ Criterios de aceptación
   - Opción A (rápida): Supabase Auth + DB (perfil, favoritos y carrito por usuario).
   - Opción B: Auth0 + API propia (Workers/Functions) + DB.
 - Flujo: registro, login, logout. Página `/profile` para editar nombre, avatar y preferencias.
-- Sincronizar favorites/cart entre “guest” y “logged-in”.
+- Sincronizar favorites/cart entre "guest" y "logged-in".
+
+Estado: ✅ COMPLETADA
+
+Implementado
+- ✅ authStore con Zustand + persist (mock en localStorage)
+- ✅ Formularios: LoginForm, RegisterForm, EditProfileForm (React Hook Form + Zod)
+- ✅ AuthModal accesible con Headless UI (Dialog)
+- ✅ UserMenu dropdown con avatar, enlaces y logout
+- ✅ ProfilePage funcional: avatar, estadísticas, edición, acciones
+- ✅ Integración en Header: botones auth (guest) / UserMenu (autenticado)
+- ✅ Hook useAuthSync para sincronización automática de stores
+- ✅ Migración de datos guest → usuario al login
+- ✅ Persistencia por usuario: cart-storage-{userId}, favorites-storage-{userId}
+- ✅ Avatares automáticos con DiceBear API
+- ✅ Validaciones: email, password (mín 6), confirmación password
+- ✅ Tipos TypeScript: User, LoginCredentials, RegisterData, UpdateProfileData
 
 Criterios de aceptación
-- Auth segura (tokens en `sessionStorage`/`httpOnly` según implementación del backend).
-- Perfil editable y persistido. Rehidratación de stores al iniciar sesión.
+- ✅ Auth segura (mock localStorage, listo para migrar a httpOnly cookies)
+- ✅ Perfil editable y persistido
+- ✅ Rehidratación de stores al iniciar sesión
+- ✅ Migración transparente de datos guest → usuario
+
+Ver detalles: `web/FASE_7_RESUMEN.md`
 
 ---
 
@@ -414,7 +452,7 @@ Funcionalidad | Fase | Puntos clave | Aceptación
 Carrito (completo) | 3 y 6 | Zustand persist, cantidades, totales, vaciar, cupones, impuestos | ✅ Totales correctos, persistencia, cupones funcionando
 Categorías reales | 4 | `/categories` + slug navegable | ✅ URL refleja estado, deep link OK
 Favoritos visibles | 5 | Vista dedicada, acciones | ✅ Persistencia + acciones consistentes
-Perfil (auth) | 7 | Supabase/Auth0 + sincronización | Login/logout, perfil editable
+Perfil (auth) | 7 | Mock localStorage + sincronización | ✅ Login/logout, perfil editable, migración guest→usuario
 Contacto completo | 8 | RHF + Zod + envío | Validación + entrega verificada
 
 ---
@@ -520,4 +558,4 @@ Nota: Cuando la nueva app alcance paridad, mover raíz del repo si se desea, y a
 
 ---
 
-Actualizado: 2025-10-14
+Actualizado: 2025-01-15

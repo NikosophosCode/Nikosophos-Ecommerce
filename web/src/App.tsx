@@ -5,8 +5,12 @@ import { CartPage } from './app/routes/CartPage'
 import { ProfilePage } from './app/routes/ProfilePage'
 import { ContactPage } from './app/routes/ContactPage'
 import { CategoryPage } from './app/routes/CategoryPage'
+import { useAuthSync } from './app/store/useAuthSync'
 
 export default function App() {
+  // Sincronizar stores con autenticación
+  useAuthSync()
+
   return (
     <BrowserRouter>
       <Routes>

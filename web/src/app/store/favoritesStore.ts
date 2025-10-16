@@ -8,6 +8,43 @@ type FavoritesStore = {
   toggleFavorite: (productId: number) => void
   isFavorite: (productId: number) => boolean
   clearFavorites: () => void
+  // Métodos para sincronización con usuario
+  getGuestData: () => Set<number>
+  loadUserData: (userId: string) => void
+  migrateGuestData: (userId: string) => void
+}
+
+// Función helper para obtener la key de almacenamiento según el usuario
+const getStorageKey = (userId?: string) => {
+  return userId ? `favorites-storage-${userId}` : 'favorites-storage-guest'
+}
+
+// Función para obtener datos del store de un usuario específico
+const getUserFavoritesData = (userId: string): Set<number> => {
+  try {
+    const stored = localStorage.getItem(getStorageKey(userId))
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      return new Set(parsed.state?.favorites || [])
+    }
+  } catch (error) {
+    console.error('Error loading user favorites data:', error)
+  }
+  return new Set()
+}
+
+// Función para guardar datos de un usuario
+const saveUserFavoritesData = (userId: string, favorites: Set<number>) => {
+  try {
+    const data = {
+      state: {
+        favorites: Array.from(favorites),
+      },
+    }
+    localStorage.setItem(getStorageKey(userId), JSON.stringify(data))
+  } catch (error) {
+    console.error('Error saving user favorites data:', error)
+  }
 }
 
 export const useFavoritesStore = create<FavoritesStore>()(
@@ -45,9 +82,30 @@ export const useFavoritesStore = create<FavoritesStore>()(
       },
 
       clearFavorites: () => set({ favorites: new Set() }),
+
+      getGuestData: () => {
+        return new Set(get().favorites)
+      },
+
+      loadUserData: (userId: string) => {
+        const userFavorites = getUserFavoritesData(userId)
+        set({ favorites: userFavorites })
+      },
+
+      migrateGuestData: (userId: string) => {
+        const guestFavorites = get().favorites
+        const userFavorites = getUserFavoritesData(userId)
+        
+        // Combinar: unir ambos sets
+        const mergedFavorites = new Set([...userFavorites, ...guestFavorites])
+
+        // Guardar y aplicar
+        saveUserFavoritesData(userId, mergedFavorites)
+        set({ favorites: mergedFavorites })
+      },
     }),
     {
-      name: 'favorites-storage',
+      name: 'favorites-storage-guest', // Siempre usar guest por defecto
       storage: {
         getItem: (name) => {
           const str = localStorage.getItem(name)

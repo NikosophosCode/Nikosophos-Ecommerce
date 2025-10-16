@@ -1,8 +1,12 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { useCartStore } from '@/app/store/cartStore'
 import { useFavoritesStore } from '@/app/store/favoritesStore'
+import { useAuthStore } from '@/app/store/authStore'
 import { MainNav } from './MainNav'
 import { MobileNav } from './MobileNav'
+import { UserMenu } from './UserMenu'
+import { AuthModal } from '@/features/profile'
 
 type HeaderProps = {
   onSearch?: (query: string) => void
@@ -13,6 +17,19 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
   const items = useCartStore((state) => state.items)
   const totalItems = Object.values(items).reduce((sum, item) => sum + item.quantity, 0)
   const favoritesCount = useFavoritesStore((state) => state.favorites.size)
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const [showAuthModal, setShowAuthModal] = useState(false)
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login')
+
+  const handleOpenLogin = () => {
+    setAuthMode('login')
+    setShowAuthModal(true)
+  }
+
+  const handleOpenRegister = () => {
+    setAuthMode('register')
+    setShowAuthModal(true)
+  }
 
   return (
     <header className="sticky top-0 z-40 px-0 py-4 mb-4">
@@ -56,6 +73,36 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
 
           {/* Iconos de favoritos y carrito (visibles en todas las pantallas) */}
           <div className="flex items-center gap-2">
+            {/* Auth buttons o User menu */}
+            {isAuthenticated ? (
+              <UserMenu />
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleOpenLogin}
+                  className="hidden md:block px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 rounded-lg transition"
+                >
+                  Iniciar sesión
+                </button>
+                <button
+                  onClick={handleOpenRegister}
+                  className="hidden md:block px-3 py-1.5 text-sm font-medium bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition"
+                >
+                  Registrarse
+                </button>
+                {/* Icono de usuario en móvil cuando no está autenticado */}
+                <button
+                  onClick={handleOpenLogin}
+                  className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
+                  aria-label="Iniciar sesión"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
             <Link
               to="/favorites"
               className="relative p-2 rounded-lg hover:bg-white/10 transition"
@@ -109,6 +156,13 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
           </svg>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authMode}
+      />
     </header>
   )
 }
