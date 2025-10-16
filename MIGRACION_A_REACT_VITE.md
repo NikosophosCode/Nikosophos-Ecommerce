@@ -150,9 +150,6 @@ Estado general: **Fase 9 completada con éxito**. La aplicación ahora cuenta co
   - ✅ Sincronización de cart/favorites con usuario autenticado
   - ✅ Formulario de contacto completo con validación y envío
 
-- **Pendiente (Fase 10)**
-  - Fase 10: Tests unitarios, E2E y CI/CD
-
 - **Nota de ejecución**
   - Ejecutar dev server: `cd web; npm run dev` (http://localhost:5174/)
   - Build producción: `cd web; npm run build`
@@ -173,7 +170,6 @@ Estado general: **Fase 9 completada con éxito**. La aplicación ahora cuenta co
 - Fase 6 — Carrito funcional mejorado: ✅ COMPLETADA (cupones, impuestos, envío, cálculos automáticos)
 - Fase 7 — Autenticación y perfil: ✅ COMPLETADA (auth completo, ProfilePage, sincronización stores, UserMenu)
 - Fase 8 — Formulario de contacto: ✅ COMPLETADA (ContactForm, Web3Forms, validación Zod, accesibilidad)
-- Fases 9-10: ⏳ Pendientes
 
 **Documentación de fases:**
 - Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
@@ -519,17 +515,6 @@ Build exitoso con code splitting verificado:
 
 ---
 
-### Fase 10 — Calidad, tests y CI/CD
-- Unit/Integration: Vitest + Testing Library (componentes clave, stores y utils).
-- E2E: Playwright (flujos: búsqueda, favorito, carrito, checkout stub, login).
-- GitHub Actions: lint + typecheck + test + build en PRs, previsualizaciones (Vercel/Netlify).
-- Convenciones: Conventional Commits, PR checklist.
-
-Criterios de aceptación
-- CI en verde, cobertura mínima acordada (p.ej., 70%).
-- Previews automáticas por PR.
-
----
 
 ## 7) Roadmap de ampliación de funcionalidades (resumen)
 
@@ -630,7 +615,7 @@ Nota: Cuando la nueva app alcance paridad, mover raíz del repo si se desea, y a
 - F3–F4: 2–3 días
 - F5–F6: 2–3 días
 - F7–F8: 3–6 días (depende de auth/back)
-- F9–F10: 3–5 días
+- F9: 3–5 días
 
 ---
 
