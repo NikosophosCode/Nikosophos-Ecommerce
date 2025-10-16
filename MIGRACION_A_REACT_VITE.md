@@ -72,6 +72,17 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Persistencia de favoritos validada (localStorage)
   - ✅ Cache compartido con otros productos (reutiliza queryKey ['product', id])
 
+- **Completado (Fase 6 - 2025-01-15)**
+  - ✅ Sistema de cupones de descuento con validación
+  - ✅ Cupones predefinidos (WELCOME10, SAVE20, FIRST5) con reglas de negocio
+  - ✅ Componente `CouponInput` con feedback visual y manejo de errores
+  - ✅ Cálculo automático de impuestos (16% IVA configurable)
+  - ✅ Cálculo de envío con umbral de envío gratis ($50+)
+  - ✅ Resumen de carrito mejorado con desglose detallado (subtotal, descuento, impuestos, envío, total)
+  - ✅ Utilidades de cálculo de precios en `lib/utils.ts`
+  - ✅ Persistencia de cupón aplicado en localStorage
+  - ✅ Validación de cupones con compra mínima
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
@@ -83,9 +94,9 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Query params sincronizados con URL
   - ✅ Deep links funcionando correctamente
   - ✅ Página de favoritos funcional con acciones completas
+  - ✅ Sistema de cupones y cálculos de carrito funcionando
 
-- **Pendiente (Fases 6-10)**
-  - Fase 6: Mejoras adicionales al carrito (descuentos, impuestos, etc. - opcional)
+- **Pendiente (Fases 7-10)**
   - Fase 7: Autenticación y perfil de usuario
   - Fase 8: Formulario de contacto completo con validación
   - Fase 9: Optimizaciones de rendimiento (lazy loading, prefetch, virtualización)
@@ -108,7 +119,8 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
 - Fase 3 — Estado global: Carrito y Favoritos persistentes: ✅ COMPLETADA (CartPage, CartItem, badges funcionales, persistencia)
 - Fase 4 — Routing: categorías reales y navegación: ✅ COMPLETADA (CategoryNav, filtrado, query params, deep linking)
 - Fase 5 — Página de favoritos funcional: ✅ COMPLETADA (FavoriteItem, useFavoriteProducts, estado vacío, acciones)
-- Fases 6-10: ⏳ Pendientes
+- Fase 6 — Carrito funcional mejorado: ✅ COMPLETADA (cupones, impuestos, envío, cálculos automáticos)
+- Fases 7-10: ⏳ Pendientes
 
 **Documentación de fases:**
 - Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
@@ -317,12 +329,29 @@ Ver detalles: `web/FASE_5_RESUMEN.md`
 
 ### Fase 6 — Carrito funcional
 - Vista `/cart` con tabla de items, control de cantidad, subtotal y total.
-- Botón “Vaciar carrito” y “Continuar compra” (stub de checkout).
+- Botón "Vaciar carrito" y "Continuar compra" (stub de checkout).
 - Derivados memorizados (selectores) para rendimiento.
 
+Estado: ✅ COMPLETADA
+
+Implementado
+- ✅ Sistema de cupones de descuento con 3 códigos predefinidos
+- ✅ Validación de cupones con reglas de negocio (compra mínima, tipos)
+- ✅ Componente `CouponInput` con UI/UX pulida
+- ✅ Cálculo automático de impuestos (16% IVA configurable en constants)
+- ✅ Cálculo de envío dinámico (gratis sobre $50, $10 bajo umbral)
+- ✅ Resumen mejorado con 5 líneas: subtotal, descuento, impuestos, envío, total
+- ✅ Funciones de cálculo en `lib/utils.ts`: `calculateDiscount`, `calculateTax`, `calculateShipping`, `calculateTotal`
+- ✅ Store extendido con `couponCode`, `applyCoupon`, `removeCoupon`
+- ✅ Persistencia de cupón aplicado en localStorage
+- ✅ Feedback visual con toasts (cupón aplicado/removido/error)
+
 Criterios de aceptación
-- Cambios de cantidad recalculan totales en tiempo real.
-- Persistencia y consistencia entre páginas.
+- ✅ Cambios de cantidad recalculan totales en tiempo real.
+- ✅ Persistencia y consistencia entre páginas.
+- ✅ Cupones válidos se aplican correctamente.
+- ✅ Validación de compra mínima funciona.
+- ✅ Impuestos y envío se calculan dinámicamente.
 
 ---
 
@@ -382,7 +411,7 @@ Criterios de aceptación
 
 Funcionalidad | Fase | Puntos clave | Aceptación
 --- | --- | --- | ---
-Carrito (completo) | 3 y 6 | Zustand persist, cantidades, totales, vaciar | ✅ Totales correctos, persistencia estable
+Carrito (completo) | 3 y 6 | Zustand persist, cantidades, totales, vaciar, cupones, impuestos | ✅ Totales correctos, persistencia, cupones funcionando
 Categorías reales | 4 | `/categories` + slug navegable | ✅ URL refleja estado, deep link OK
 Favoritos visibles | 5 | Vista dedicada, acciones | ✅ Persistencia + acciones consistentes
 Perfil (auth) | 7 | Supabase/Auth0 + sincronización | Login/logout, perfil editable

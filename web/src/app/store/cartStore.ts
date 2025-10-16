@@ -8,16 +8,20 @@ export type CartItemWithProduct = CartItem & {
 
 type CartStore = {
   items: Record<number, CartItem>
+  couponCode: string | null
   addItem: (productId: number, quantity?: number) => void
   removeItem: (productId: number) => void
   updateQuantity: (productId: number, quantity: number) => void
   clearCart: () => void
+  applyCoupon: (code: string) => void
+  removeCoupon: () => void
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: {},
+      couponCode: null,
 
       addItem: (productId, quantity = 1) => {
         set((state) => {
@@ -55,7 +59,11 @@ export const useCartStore = create<CartStore>()(
         }))
       },
 
-      clearCart: () => set({ items: {} }),
+      clearCart: () => set({ items: {}, couponCode: null }),
+
+      applyCoupon: (code) => set({ couponCode: code }),
+
+      removeCoupon: () => set({ couponCode: null }),
     }),
     {
       name: 'cart-storage',
