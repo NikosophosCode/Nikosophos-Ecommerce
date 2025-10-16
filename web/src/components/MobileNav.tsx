@@ -7,9 +7,7 @@ export function MobileNav() {
   const navLinks = [
     { to: '/', label: 'Inicio', icon: 'home' },
     { to: '/profile', label: 'Perfil', icon: 'user' },
-    { to: '/contact', label: 'Contacto', icon: 'mail' },
-    { to: '/favorites', label: 'Favoritos', icon: 'heart' },
-    { to: '/cart', label: 'Carrito', icon: 'cart' }
+    { to: '/contact', label: 'Contacto', icon: 'mail' }
   ]
 
   // Cerrar menú al presionar Escape

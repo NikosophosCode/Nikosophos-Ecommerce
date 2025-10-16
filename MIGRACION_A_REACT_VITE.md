@@ -62,6 +62,16 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Estilos `scrollbar-hide` para scroll horizontal limpio
   - ✅ Manejo de errores y estados vacíos en CategoryPage
 
+- **Completado (Fase 5 - 2025-01-15)**
+  - ✅ Feature favorites creado: `features/favorites/{hooks,ui}`
+  - ✅ Hook `useFavoriteProducts` con useQueries de TanStack Query (fetch en paralelo)
+  - ✅ Componente `FavoriteItem` reutilizable con acciones (añadir al carrito, quitar favorito)
+  - ✅ FavoritesPage completa con listado, estado vacío, loading y botón "Vaciar favoritos"
+  - ✅ Integración completa con stores (cartStore, favoritesStore) y toasts
+  - ✅ Layout responsive optimizado para móvil y desktop
+  - ✅ Persistencia de favoritos validada (localStorage)
+  - ✅ Cache compartido con otros productos (reutiliza queryKey ['product', id])
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
@@ -72,9 +82,9 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
   - ✅ Navegación por categorías funcional
   - ✅ Query params sincronizados con URL
   - ✅ Deep links funcionando correctamente
+  - ✅ Página de favoritos funcional con acciones completas
 
-- **Pendiente (Fases 5-10)**
-  - Fase 5: Página de favoritos funcional con listado
+- **Pendiente (Fases 6-10)**
   - Fase 6: Mejoras adicionales al carrito (descuentos, impuestos, etc. - opcional)
   - Fase 7: Autenticación y perfil de usuario
   - Fase 8: Formulario de contacto completo con validación
@@ -97,11 +107,13 @@ Estado general: **Fase 4 completada con éxito + Mejoras de navegación y respon
 - Fase 2 — Home con paridad funcional: ✅ COMPLETADA (Header, búsqueda, filtros básicos, ProductDialog, toasts, routing, stores)
 - Fase 3 — Estado global: Carrito y Favoritos persistentes: ✅ COMPLETADA (CartPage, CartItem, badges funcionales, persistencia)
 - Fase 4 — Routing: categorías reales y navegación: ✅ COMPLETADA (CategoryNav, filtrado, query params, deep linking)
-- Fases 5-10: ⏳ Pendientes
+- Fase 5 — Página de favoritos funcional: ✅ COMPLETADA (FavoriteItem, useFavoriteProducts, estado vacío, acciones)
+- Fases 6-10: ⏳ Pendientes
 
 **Documentación de fases:**
 - Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
 - Ver `web/FASE_4_RESUMEN.md` para detalles de Fase 4
+- Ver `web/FASE_5_RESUMEN.md` para detalles de Fase 5
 
 ---
 
@@ -282,9 +294,24 @@ Ver detalles: `web/FASE_4_RESUMEN.md`
 - Vista `/favorites` que lista productos marcados.
 - Permitir quitar desde la lista y añadir al carrito.
 
+Estado: ✅ COMPLETADA
+
+Implementado
+- ✅ Feature `favorites` con estructura modular (`hooks`, `ui`)
+- ✅ Hook `useFavoriteProducts` con useQueries para fetch en paralelo
+- ✅ Componente `FavoriteItem` con acciones (añadir al carrito, quitar favorito)
+- ✅ FavoritesPage completa con listado, estado vacío y loading
+- ✅ Botón "Vaciar favoritos" con confirmación
+- ✅ Layout responsive móvil/desktop
+- ✅ Integración con stores y toasts
+
 Criterios de aceptación
-- Sin favoritos: estado vacío agradable.
-- Acciones actualizan stores y UI de forma consistente.
+- ✅ Sin favoritos: estado vacío agradable.
+- ✅ Acciones actualizan stores y UI de forma consistente.
+- ✅ Persistencia entre recargas.
+- ✅ Añadir al carrito desde favoritos funciona.
+
+Ver detalles: `web/FASE_5_RESUMEN.md`
 
 ---
 
@@ -355,9 +382,9 @@ Criterios de aceptación
 
 Funcionalidad | Fase | Puntos clave | Aceptación
 --- | --- | --- | ---
-Carrito (completo) | 3 y 6 | Zustand persist, cantidades, totales, vaciar | Totales correctos, persistencia estable
-Categorías reales | 4 | `/categories` + slug navegable | URL refleja estado, deep link OK
-Favoritos visibles | 5 | Vista dedicada, acciones | Persistencia + acciones consistentes
+Carrito (completo) | 3 y 6 | Zustand persist, cantidades, totales, vaciar | ✅ Totales correctos, persistencia estable
+Categorías reales | 4 | `/categories` + slug navegable | ✅ URL refleja estado, deep link OK
+Favoritos visibles | 5 | Vista dedicada, acciones | ✅ Persistencia + acciones consistentes
 Perfil (auth) | 7 | Supabase/Auth0 + sincronización | Login/logout, perfil editable
 Contacto completo | 8 | RHF + Zod + envío | Validación + entrega verificada
 

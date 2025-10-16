@@ -15,8 +15,9 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
   const favoritesCount = useFavoritesStore((state) => state.favorites.size)
 
   return (
-    <header className="glass sticky top-0 z-40 rounded-2xl px-0 py-4 mb-4">
-      <div className="flex items-center justify-between gap-4 px-4">
+    <header className="sticky top-0 z-40 px-0 py-4 mb-4">
+      {/* Primera fila: Logo y menú móvil con iconos */}
+      <div className="flex items-center justify-between gap-4 px-4 mb-3 md:mb-0">
         {/* Logo y menú móvil */}
         <div className="flex items-center gap-3">
           <MobileNav />
@@ -27,12 +28,15 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
           </Link>
         </div>
 
-        {/* Navegación principal (desktop) */}
-        <MainNav />
+        {/* Navegación principal (desktop) - oculta en móvil */}
+        <div className="hidden md:block">
+          <MainNav />
+        </div>
 
-        {/* Búsqueda y badges */}
-        <div className="flex items-center gap-3 flex-1 md:flex-initial md:max-w-md">
-          <div className="relative flex-1 md:w-64">
+        {/* Iconos favoritos y carrito (siempre visibles) + búsqueda en desktop */}
+        <div className="flex items-center gap-3">
+          {/* Búsqueda solo en desktop */}
+          <div className="hidden md:block relative md:max-w-72">
             <input
               type="search"
               placeholder="Buscar productos..."
@@ -50,7 +54,8 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
             </svg>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2">
+          {/* Iconos de favoritos y carrito (visibles en todas las pantallas) */}
+          <div className="flex items-center gap-2">
             <Link
               to="/favorites"
               className="relative p-2 rounded-lg hover:bg-white/10 transition"
@@ -81,6 +86,27 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
               )}
             </Link>
           </div>
+        </div>
+      </div>
+
+      {/* Segunda fila: Buscador en móvil (debajo del título) */}
+      <div className="md:hidden px-4">
+        <div className="relative w-full">
+          <input
+            type="search"
+            placeholder="Buscar productos..."
+            value={searchQuery}
+            onChange={(e) => onSearch?.(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition text-base"
+          />
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
       </div>
     </header>
