@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
 import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 import { useCartStore } from '@/app/store/cartStore'
 import { useProducts } from '@/features/products/hooks/useProducts'
 import { CartItem } from '@/features/cart/ui/CartItem'
@@ -208,6 +209,8 @@ export function CartPage() {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }

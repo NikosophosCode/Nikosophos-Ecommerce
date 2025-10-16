@@ -8,7 +8,7 @@ La guía incluye arquitectura objetivo, stack recomendado, estructura de carpeta
 
 ## Progreso actual de la migración (2025-01-15)
 
-Estado general: **Fase 7 completada con éxito**. La aplicación ahora cuenta con un sistema completo de autenticación y gestión de perfiles, incluyendo registro, login, logout, edición de perfil y sincronización automática del carrito y favoritos con el usuario autenticado.
+Estado general: **Fase 8 completada con éxito**. La aplicación ahora cuenta con un sistema completo de contacto con formulario validado y Footer migrado desde el proyecto original con todas sus funcionalidades (newsletter, redes sociales, navegación, scroll to top).
 
 - **Completado (Fase 1)**
   - ✅ Proyecto React + Vite creado en `web/` con TypeScript
@@ -98,6 +98,29 @@ Estado general: **Fase 7 completada con éxito**. La aplicación ahora cuenta co
   - ✅ Validaciones robustas (email, password mín 6 chars, confirmación password)
   - ✅ Tipos TypeScript: User, LoginCredentials, RegisterData, UpdateProfileData
 
+- **Completado (Fase 8 - 2025-01-15)**
+  - ✅ Feature contact creado: `features/contact/{api,ui}`
+  - ✅ Schema de validación completo con Zod (name, email, subject, message, consent)
+  - ✅ Componente ContactForm con React Hook Form + validación en tiempo real
+  - ✅ Servicio de API integrado con Web3Forms (envío de emails sin backend)
+  - ✅ Estados de carga (isSubmitting), éxito (submitSuccess) y error
+  - ✅ Toasts con Sonner para feedback de envío
+  - ✅ Reset automático del formulario tras envío exitoso
+  - ✅ Accesibilidad completa: ARIA labels, roles, focus management
+  - ✅ Validaciones robustas: name (regex con acentos/ñ), email, subject (5+), message (20+)
+  - ✅ ContactPage mejorada con hero section y sección de contacto adicional
+  - ✅ Diseño responsive con estilos glass y gradients
+  - ✅ Configuración con .env.example para VITE_WEB3FORMS_KEY
+  - ✅ Función isWeb3FormsConfigured para validar setup
+  - ✅ Manejo de errores de red y servidor con mensajes descriptivos
+  - ✅ **Footer migrado**: Componente Footer con todas las funcionalidades del original
+  - ✅ Newsletter funcional con validación de email y toasts
+  - ✅ Redes sociales (GitHub, X/Twitter, Instagram) con enlaces externos
+  - ✅ Navegación interna (Inicio, Productos, Contacto)
+  - ✅ Copyright dinámico con año actual
+  - ✅ Botón "Ir arriba" con scroll suave
+  - ✅ Footer integrado en todas las páginas (HomePage, CategoryPage, FavoritesPage, CartPage, ProfilePage, ContactPage)
+
 - **Verificado**
   - ✅ Build: PASS (`npm run build` - producción)
   - ✅ Typecheck: PASS (tsc -b en build)
@@ -112,9 +135,9 @@ Estado general: **Fase 7 completada con éxito**. La aplicación ahora cuenta co
   - ✅ Sistema de cupones y cálculos de carrito funcionando
   - ✅ Sistema de autenticación funcionando (registro, login, logout, edición)
   - ✅ Sincronización de cart/favorites con usuario autenticado
+  - ✅ Formulario de contacto completo con validación y envío
 
-- **Pendiente (Fases 8-10)**
-  - Fase 8: Formulario de contacto completo con validación
+- **Pendiente (Fases 9-10)**
   - Fase 9: Optimizaciones de rendimiento (lazy loading, prefetch, virtualización)
   - Fase 10: Tests unitarios, E2E y CI/CD
 
@@ -137,13 +160,15 @@ Estado general: **Fase 7 completada con éxito**. La aplicación ahora cuenta co
 - Fase 5 — Página de favoritos funcional: ✅ COMPLETADA (FavoriteItem, useFavoriteProducts, estado vacío, acciones)
 - Fase 6 — Carrito funcional mejorado: ✅ COMPLETADA (cupones, impuestos, envío, cálculos automáticos)
 - Fase 7 — Autenticación y perfil: ✅ COMPLETADA (auth completo, ProfilePage, sincronización stores, UserMenu)
-- Fases 8-10: ⏳ Pendientes
+- Fase 8 — Formulario de contacto: ✅ COMPLETADA (ContactForm, Web3Forms, validación Zod, accesibilidad)
+- Fases 9-10: ⏳ Pendientes
 
 **Documentación de fases:**
 - Ver `web/FASE_3_RESUMEN.md` para detalles de Fase 3
 - Ver `web/FASE_4_RESUMEN.md` para detalles de Fase 4
 - Ver `web/FASE_5_RESUMEN.md` para detalles de Fase 5
 - Ver `web/FASE_7_RESUMEN.md` para detalles de Fase 7
+- Ver `web/FASE_8_RESUMEN.md` para detalles de Fase 8
 
 ---
 

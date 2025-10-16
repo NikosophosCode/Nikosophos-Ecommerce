@@ -1,4 +1,5 @@
 export { Header } from './Header'
+export { Footer } from './Footer'
 export { MainNav } from './MainNav'
 export { MobileNav } from './MobileNav'
 export { UserMenu } from './UserMenu'

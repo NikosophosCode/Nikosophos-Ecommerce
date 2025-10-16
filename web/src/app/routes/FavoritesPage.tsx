@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 import { useFavoriteProducts } from '@/features/favorites/hooks'
 import { FavoriteItem } from '@/features/favorites/ui'
 import { useFavoritesStore } from '@/app/store/favoritesStore'
@@ -103,6 +104,8 @@ export function FavoritesPage() {
           )}
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }

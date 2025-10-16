@@ -3,6 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom'
 import { ProductGrid } from '@/features/products/ui/ProductGrid'
 import { ProductDialog } from '@/features/products/ui/ProductDialog'
 import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 import { CategoryNav, useCategories } from '@/features/categories'
 import type { Product } from '@/lib/types'
 
@@ -82,6 +83,8 @@ export function CategoryPage() {
           onClose={() => setSelectedProduct(null)}
         />
       </div>
+
+      <Footer />
     </div>
   )
 }

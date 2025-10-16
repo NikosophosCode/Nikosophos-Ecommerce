@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer'
 import { useAuthStore } from '@/app/store/authStore'
 import { useCartStore } from '@/app/store/cartStore'
 import { useFavoritesStore } from '@/app/store/favoritesStore'
@@ -155,6 +156,8 @@ export function ProfilePage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }
