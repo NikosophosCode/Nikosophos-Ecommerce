@@ -34,9 +34,11 @@ export function CartItem({ product, quantity }: CartItemProps) {
       <div className="flex gap-3 sm:gap-4">
         {/* Image */}
         <figure className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden flex-shrink-0">
-          <img                                                                                                    
+          <img
             src={imgUrl}
             alt={product.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG

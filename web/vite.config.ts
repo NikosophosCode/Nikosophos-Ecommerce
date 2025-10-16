@@ -11,4 +11,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    host: true, // Escucha en todas las interfaces de red (0.0.0.0)
+    port: 5174,
+    strictPort: false, // Busca otro puerto si 5174 está ocupado
+  },
 })

@@ -1,8 +1,11 @@
+import { memo } from 'react'
 import type { Product } from '@/lib/types'
 import { pickSafeImage, formatCurrency } from '@/lib/utils'
 import { PLACEHOLDER_IMG } from '@/lib/constants'
 import { useCartStore } from '@/app/store/cartStore'
 import { useFavoritesStore } from '@/app/store/favoritesStore'
+import { useQueryClient } from '@tanstack/react-query'
+import { fetchProduct } from '../api/products.api'
 import { toast } from 'sonner'
 
 type ProductCardProps = {
@@ -10,11 +13,12 @@ type ProductCardProps = {
   onClick?: () => void
 }
 
-export function ProductCard({ product, onClick }: ProductCardProps) {
+function ProductCardComponent({ product, onClick }: ProductCardProps) {
   const imgUrl = pickSafeImage(product.images)
   const addToCart = useCartStore((state) => state.addItem)
   const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite)
   const isFavorite = useFavoritesStore((state) => state.isFavorite(product.id))
+  const queryClient = useQueryClient()
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -28,10 +32,20 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     toast.success(isFavorite ? 'Quitado de favoritos' : 'Añadido a favoritos')
   }
 
+  // Prefetch de datos del producto en hover para mejorar UX
+  const handleMouseEnter = () => {
+    queryClient.prefetchQuery({
+      queryKey: ['product', product.id],
+      queryFn: () => fetchProduct(product.id),
+      staleTime: 5 * 60 * 1000, // 5 minutos
+    })
+  }
+
   return (
     <article
       className="group rounded-2xl overflow-hidden glass ring-1 ring-white/10 transition duration-300 hover:-translate-y-0.5 hover:ring-white/20 cursor-pointer"
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -47,6 +61,7 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
             src={imgUrl}
             alt={product?.title ?? 'Producto'}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = PLACEHOLDER_IMG
@@ -109,3 +124,6 @@ export function ProductCard({ product, onClick }: ProductCardProps) {
     </article>
   )
 }
+
+// Memoizar el componente para evitar re-renders innecesarios
+export const ProductCard = memo(ProductCardComponent)
