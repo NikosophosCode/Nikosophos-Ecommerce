@@ -125,7 +125,7 @@ export function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
           {/* Brand */}
           <div className="text-center sm:text-left">
-            <h2 className="font-semibold tracking-tight text-lg">Nikosophos Store</h2>
+            <h2 className="font-semibold tracking-tight text-lg">PlatziStore</h2>
             <p className="mt-1 text-sm text-slate-300 text-balance">
               Productos únicos para gente única.
             </p>
@@ -219,7 +219,7 @@ export function Footer() {
 
           {/* Bottom bar */}
           <div className="col-span-full mt-3 pt-3 border-t border-white/10 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <span>© {currentYear} Nikosophos Store. Todos los derechos reservados.</span>
+            <span>© {currentYear} PlatziStore. Todos los derechos reservados.</span>
             <button
               onClick={scrollToTop}
               className="px-3 py-1.5 rounded-lg hover:bg-white/5 transition text-sm"

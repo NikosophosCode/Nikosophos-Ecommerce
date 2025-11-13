@@ -145,7 +145,7 @@ export function MobileNav() {
           {/* Footer del drawer */}
           <div className="p-4 border-t border-white/10">
             <p className="text-xs text-slate-400 text-center">
-              Nikosophos Store © {new Date().getFullYear()}
+              PlatziStore © {new Date().getFullYear()}
             </p>
           </div>
         </div>

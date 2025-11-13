@@ -1,4 +1,4 @@
-# 🛍️ Nikosophos Store - Modern E-commerce Platform
+# 🛍️ PlatziStore - Modern E-commerce Platform
 
 <div align="center">
 

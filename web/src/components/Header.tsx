@@ -32,7 +32,7 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-40 px-0 py-4 mb-4">
+    <header className="relative top-0 z-40 px-0 py-4 mb-4">
       {/* Primera fila: Logo y menú móvil con iconos */}
       <div className="flex items-center justify-between gap-4 px-4 mb-3 md:mb-0">
         {/* Logo y menú móvil */}
@@ -40,7 +40,7 @@ export function Header({ onSearch, searchQuery = '' }: HeaderProps) {
           <MobileNav />
           <Link to="/" className="flex items-center gap-2">
             <h1 className="text-xl font-semibold tracking-tight">
-              Nikosophos Store
+              PlatziStore
             </h1>
           </Link>
         </div>
