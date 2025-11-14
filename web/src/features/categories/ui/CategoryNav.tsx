@@ -33,7 +33,7 @@ export function CategoryNav() {
         className={`
           px-4 py-2 rounded-lg whitespace-nowrap transition-all
           ${isHome 
-            ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50' 
+            ? 'bg-blue-500 rounded-lg text-white shadow-md shadow-blue-500/50' 
             : 'bg-white/5 hover:bg-white/10 border border-white/10'
           }
         `}
@@ -48,7 +48,7 @@ export function CategoryNav() {
           className={`
             px-4 py-2 rounded-lg whitespace-nowrap transition-all
             ${isActiveCategory(category.id)
-              ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/50'
+              ? 'bg-blue-500 rounded-lg text-white shadow-md shadow-blue-500/50'
               : 'bg-white/5 hover:bg-white/10 border border-white/10'
             }
           `}
